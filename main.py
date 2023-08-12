@@ -24,7 +24,7 @@ def main():
     usuarios = []
     contas =[]
 
-    #inicialização do sistema + mesnagem de boas vindas + autor kkkkkkk
+    #inicialização do sistema + mensagem de boas vindas + autor kkkkkkk
     prompt_init = """
     ###################################################################
 
@@ -42,27 +42,58 @@ def main():
 
         #operação que cria usuario
         if operacoes == "NU":
-            print("novo usuario função")
+            new_user(usuarios)
 
         #operação para criação de nova conta para o usuario
         elif operacoes == "NC":
-            print("nova conta função")
+            #leitura de contas e referenciação de possivel conta
+            n_conta = len(contas) + 1
+            conta = new_conta(AGENCIA, n_conta, usuarios)
+
+            # se conta não exixtir add conta
+            if conta:
+                contas.append(conta)
 
         #operação para listar contas cadastradas pelo usuario
         elif operacoes == "LCC":
-            print("Listar contas cadastradas função")
+            lista = len(contas)
+
+            if  lista == 0:
+                msg = """\n
+                    ###################################################################
+
+                                    Nenhuma conta cadastrada no momento! 
+            
+                    ###################################################################\n"""
+                print(msg)
+            
+            else:
+                list_conta(contas)
 
         #operação para realizar depósito
         elif operacoes == "D":
-            print("Depositar função")
+            #input para identificar valor digitado pelo usuario + efetuação do deposito
+            valor = float(input("\tDigite o valor à ser depositado: "))
+            
+            saldo, extrato = deposito(saldo, valor, extrato)
 
         #operação para efetuar saque
         elif operacoes == "S":
-            print("sacar função")
+            #input do user para captação de daos
+            valor = float(input("\tDigite o valor que seja sacado: "))
+            #parametros a serem passados para função
+            saldo, extrato = sacar(
+                saldo=saldo,
+                valor=valor,
+                extrato=extrato,
+                limite=limite,
+                n_op_saque=n_op_saque,
+                limite_saques=LIMITE_DE_SAQUE,
+            )
         
         #operação para exibir extrato
         elif operacoes == "E":
-            print("extrato função")
+            view_extrato(saldo, extrato=extrato)
 
         #operação "Sair/Encerrar" o sistema
         elif operacoes == "SE":
@@ -70,23 +101,11 @@ def main():
         
         #codigopara evitar erros de digitação
         else:
-            fal = """\n
-            ###################################################################
-
-                        Comando não encontrado! Tente Novamente. 
-            
-            ###################################################################\n"""
-            print(fal)
+            debug_error()
 
     #codigo para evitar erros na execução da inicializaçõa do codigo
     else:
-        error = """\n
-        ###################################################################
-
-                    Comando não encontrado! Tente Novamente. 
-        
-        ###################################################################\n"""
-        print(error)
+        debug_error()
         return main()
     
 
